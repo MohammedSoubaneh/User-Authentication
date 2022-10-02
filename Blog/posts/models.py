@@ -11,4 +11,4 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     title = models.CharField(max_length=50)
     text_field = models.TextField()
-    status = models.CharField(choice=STATUS_CHOICE)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICE)

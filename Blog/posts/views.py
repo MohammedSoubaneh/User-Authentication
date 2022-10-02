@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from .models import Post
 
-# Create your views here.
+def get_posts(self):
+    posts = Post.objects.all()
+    return render({
+        'post': posts
+    })
