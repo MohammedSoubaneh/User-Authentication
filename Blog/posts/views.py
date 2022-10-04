@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -26,6 +27,7 @@ class PostDetailView(APIView):
     
     def get(self, request, pk, format=None):
         post = Post.objects.get(pk=pk)
+
         serializer = PostSerializer(post)
         return Response(serializer.data, status.HTTP_200_OK)
     
