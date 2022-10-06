@@ -1,10 +1,19 @@
 from rest_framework import serializers
 from .models import Post, Comment
+from taggit.models import Tag
+
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
+    tags = TagSerializer()
     class Meta:
         model = Post
-        fields = ['user', 'title', 'text_field']
+        fields = ['user', 'title', 'text_field', 'tags']
 
     def create(self, validated_data):
         return Post.objects.create(**validated_data)

@@ -19,7 +19,7 @@ class Post(models.Model):
     text_field = models.TextField()
     slug = models.SlugField(max_length=250, default='')
     status = models.CharField(max_length=50, choices=STATUS_CHOICE)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
 
     def __str__(self):

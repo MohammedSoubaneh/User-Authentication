@@ -8,14 +8,20 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .serializer import PostSerializer, CommentSerializer
 from .models import Post, Comment
+from taggit.models import Tag
 
 class PostView(APIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'text_field']
     
 
-    def get(self, request, format=None):
+    def get(self, request,tag_slug=None, format=None):
         posts = Post.objects.all()
+        if tag_slug:
+            tags = get_object_or_404(Tag, slug=tag_slug)
+            posts = posts.filter(tags__in=[tags])
+            serializer = PostSerializer(posts, many=True)
+            return Response(serializer.data, status.HTTP_200_OK)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
