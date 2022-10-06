@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from rest_framework.response import Response
@@ -57,14 +57,14 @@ class SharePost(APIView):
 class CommentPost(APIView):
 
     def get(self, request, pk, format=None):
-        post = Post.objects.get(pk=pk)
-        comment = Comment.objects.filter(active=True)
+        post = get_object_or_404(Post, pk=pk)
+        comment = Comment.objects.filter(post=post)
         comment.post = post
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request, pk, format=None):
-        post = Post.objects.get(pk=pk)
+        post = get_object_or_404(Post, pk=pk)
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(post=post)

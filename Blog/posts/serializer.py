@@ -13,7 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['name', 'text_input', 'email']
+        fields = ['name', 'text_input', 'email', 'post']
 
     def create(self, validated_data):
         return Comment.objects.create(**validated_data)
