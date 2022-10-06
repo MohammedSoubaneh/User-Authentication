@@ -15,15 +15,10 @@ class PostView(APIView):
     search_fields = ['title', 'text_field']
     
 
-    def get(self, request,tag_slug=None, format=None):
+    def get(self, request, format=None):
         posts = Post.objects.all()
-        if tag_slug:
-            tags = get_object_or_404(Tag, slug=tag_slug)
-            posts = posts.filter(tags__in=[tags])
-            serializer = PostSerializer(posts, many=True)
-            return Response(serializer.data, status.HTTP_200_OK)
         serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
