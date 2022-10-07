@@ -15,7 +15,7 @@ class PostView(APIView):
     search_fields = ['title', 'text_field']
     
 
-    def get(self, request, format=None):
+    def get(self, request, tag_slug=None, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
@@ -71,3 +71,11 @@ class CommentPost(APIView):
             serializer.save(post=post)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class TagView(APIView):
+    def get(self, request, tag_slug, format=None):
+        tags = get_object_or_404(Tag, slug=tag_slug)
+        posts = Post.objects.filter(tags=tags)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
