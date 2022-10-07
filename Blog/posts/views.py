@@ -79,3 +79,11 @@ class TagView(APIView):
         posts = Post.objects.filter(tags=tags)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
+ 
+
+class RecentPostView(APIView):
+    
+    def get(self, request, format=None):
+        post = Post.objects.order_by('-slug')
+        serializer = PostSerializer(post, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
