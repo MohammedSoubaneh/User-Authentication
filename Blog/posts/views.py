@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import filters
-from django_filters.rest_framework import DjangoFilterBackend
 from .serializer import PostSerializer, CommentSerializer
 from .models import Post, Comment
 from taggit.models import Tag
