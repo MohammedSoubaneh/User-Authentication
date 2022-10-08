@@ -4,9 +4,9 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializer import LoginSerializer
+from .serializer import LoginSerializer, RegistrationSerializer
 from django.contrib.auth.models import User
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 class LoginView(APIView):
@@ -38,3 +38,19 @@ class LogoutView(APIView):
     def get(self, request, format=None):
         logout(request)
         return HttpResponse('successfully logged out')
+
+class RegistrationView(APIView):
+
+    def get(self, request, format=None):
+        user_form = RegisterForm()
+        return HttpResponse(user_form)
+
+    def post(self, request, format=None):
+        register = RegisterForm(data=request.data)
+        if register.is_valid():
+            new_user = register.save(commit=False)
+            new_user.set_password(register.cleaned_data['password'])
+            new_user.save()
+            return HttpResponse('Successfully registered')
+        else:
+            return HttpResponse('Invalid Register')
